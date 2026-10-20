@@ -1,8 +1,7 @@
 
 #  Backend de Wickhub (TPI)
 
-Es el proyecto del TPI en el Backend
-
+Pagina web para organizadoras y clientes, que permite la gestion y comercializacion de entradas a eventos, permitiendo a los clientes compras remotas dentro de esta.
 
 ## Integrantes
 
