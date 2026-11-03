@@ -1,7 +1,7 @@
 {
   "name": "sv-tpi",
   "version": "1.0.0",
-  "description": "",
+  "description": "Pagina web para organizadoras y clientes, que permite la gestion y comercializacion de entradas a eventos, permitiendo a los clientes compras remotas dentro de esta.",
   "homepage": "https://github.com/benyiaminoo/SV-TPI#readme",
   "bugs": {
     "url": "https://github.com/benyiaminoo/SV-TPI/issues"
@@ -11,7 +11,7 @@
     "url": "git+https://github.com/benyiaminoo/SV-TPI.git"
   },
   "license": "ISC",
-  "author": "Benjamin Mancilla",
+  "author": "Benjamin Mancilla & Elio Villarroel",
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
