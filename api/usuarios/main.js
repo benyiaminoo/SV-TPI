@@ -5,9 +5,35 @@ const { hashPass } = require('../usuarios/funciones')
 
 const middleware = require("../middleware")
 
+//obtener usuarios
 router.get("/", (req, res, next) => {
-    res.send("OK GET -> usuarios")
-    console.log("entró a /usuarios")
+    const sql = "SELECT * FROM usuarios"
+
+    db.query(sql)
+        .then(([rows]) => {
+            res.status(200).json(rows)
+            console.log("Se trajeron a los usuarios")
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send("Ocurrio un error")
+        })
+})
+
+//obtener usuario por id
+router.get("/:id", (req, res, next) => {
+    const { id } = req.params
+    const sql = "SELECT * FROM usuarios WHERE id_usuario = ?"
+
+    db.query(sql, [id])
+        .then(([rows]) => {
+            res.status(200).json(rows)
+            console.log("Se trajo a un usuario")
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send("Ocurrio un error")
+        })
 })
 
 //crear usuario
@@ -45,6 +71,25 @@ router.delete("/:id", middleware, (req, res, next) => {
             res.status(500).send("Ocurrio un error")
         })
 
+})
+
+//actualizar usuario
+router.put("/:id", middleware, (req, res, next) => {
+    const { id } = req.params;
+    const { nombre, apellido, dni, contrasena, email, activo } = req.body
+    const passHasheada = hashPass(contrasena);
+
+    const sql = "UPDATE usuarios SET nombre = ?, apellido = ?, dni = ?, contrasena = ?, email = ?, activo = ? WHERE id_usuario = ?"
+
+    db.query(sql, [nombre, apellido, dni, passHasheada, email, activo, id])
+        .then(() => {
+            res.status(201).send("Usuario actualizado")
+            console.log("Se actualizó un usuario")
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send("Ocurrio un error")
+        })
 })
 
 
