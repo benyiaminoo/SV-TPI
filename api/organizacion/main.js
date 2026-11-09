@@ -38,8 +38,8 @@ router.get("/:id", (req, res, next) => {
 
 //crear org con autorizacion
 router.post("/crear", middleware, (req, res, next) => {
-    const { nombre, ubicacion, creacion } = req.body
-
+    const { nombre, ubicacion} = req.body
+    const creacion = new Date().toISOString().split("T")[0];
     const sql = "INSERT INTO organizaciones (nombre, ubicacion , creacion) VALUES (?, ?, ?)";
 
     db.query(sql, [nombre, ubicacion, creacion])
