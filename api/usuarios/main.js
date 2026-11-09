@@ -7,7 +7,7 @@ const middleware = require("../middleware")
 
 //obtener usuarios
 router.get("/", (req, res, next) => {
-    const sql = "SELECT * FROM usuarios"
+    const sql = "SELECT * FROM usuarios WHERE activo = 1" 
 
     db.query(sql)
         .then(([rows]) => {
