@@ -17,14 +17,14 @@ router.post('/', function(req, res, next){
     .then(([usuarios]) => {
         if (usuarios.length === 1 ) {
             //existe el usuario
-         const usuario = usuarios[0];
-         if (verificarContra(contrasena, usuario.contrasena)){
+        const usuario = usuarios[0];
+        if (verificarContra(contrasena, usuario.contrasena)){
             //generar token
             const token = crearToken(usuario)
             res.status(200).json({token})
-         } else{
+        } else{
             res.status(403).send("No coincide usuario/contraseña")
-         }
+        }
         } else {
             //no existe 
             
