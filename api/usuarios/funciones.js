@@ -14,9 +14,10 @@ function verificarContra(nuevaContra, ContraHasheada){
 
 function crearToken(datos) {
     const payload = { 
+        email: datos.email,
         nombre: datos.nombre,
         id: datos.id_usuario,
-        // lo que necesiten
+        rol:datos.rol
     }
 
     const token = jwt.sign(payload, TOKEN_SECRET, {expiresIn: "2h"});

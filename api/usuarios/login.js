@@ -11,7 +11,7 @@ router.post('/', function(req, res, next){
     const {email, contrasena} = req.body;
     
 
-    const sql = "SELECT id_usuario, email, contrasena FROM usuarios WHERE email = ?";
+    const sql = "SELECT id_usuario, nombre, email, rol ,contrasena FROM usuarios WHERE email = ?";
 
     db.query(sql, [email])
     .then(([usuarios]) => {

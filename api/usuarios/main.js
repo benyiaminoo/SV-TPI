@@ -4,6 +4,7 @@ const db = require('../../db/conexion')
 const { hashPass } = require('../usuarios/funciones')
 
 const middleware = require("../middleware")
+const permitirRoles = require("../permisos")
 
 //obtener usuarios
 router.get("/", (req, res, next) => {
@@ -56,7 +57,7 @@ router.post("/", (req, res, next) => {
 })
 
 //borrar usuario
-router.delete("/:id", middleware, (req, res, next) => {
+router.delete("/:id", middleware,permitirRoles("admin"), (req, res, next) => {
     const { id } = req.params
 
     const sql = "UPDATE usuarios SET activo = 0 WHERE id_usuario = ?";
