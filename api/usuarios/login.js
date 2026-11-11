@@ -8,12 +8,12 @@ router.get("/", (req,res,next) => {
 })
 
 router.post('/', function(req, res, next){
-    const {nombre, contrasena} = req.body;
+    const {email, contrasena} = req.body;
     
 
-    const sql = "SELECT id_usuario, nombre, contrasena FROM usuarios WHERE nombre = ?";
+    const sql = "SELECT id_usuario, email, contrasena FROM usuarios WHERE email = ?";
 
-    db.query(sql, [nombre])
+    db.query(sql, [email])
     .then(([usuarios]) => {
         if (usuarios.length === 1 ) {
             //existe el usuario
