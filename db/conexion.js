@@ -8,7 +8,8 @@ const db = mysql.createPool({
     password:DB_PASS,
     waitForConnections: true,
     connectionLimit: 10,
-    queueLimit: 0
+    queueLimit: 0,
+    dateStrings: true // ← las fechas llegan como texto
 
 })
 
