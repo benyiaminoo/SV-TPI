@@ -22,7 +22,7 @@ router.get("/", (req, res, next) => {
 //obtener organizacion por id
 router.get("/:id", (req, res, next) => {
     const { id } = req.params
-    const sql = "SELECT * FROM organizacion WHERE id_org = ?"
+    const sql = "SELECT * FROM organizaciones WHERE id_org = ?"
 
     db.query(sql, [id])
         .then(([rows]) => {
