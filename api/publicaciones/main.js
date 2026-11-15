@@ -6,7 +6,7 @@ const middleware = require("../middleware")
 //obtener publicaciones
 router.get("/", (req, res, next) => {
 
-    const sql = "SELECT * FROM publicaciones"
+    const sql = "SELECT * FROM publicaciones WHERE activo = 1"
 
     db.query(sql)
         .then(([rows]) => {
