@@ -6,9 +6,27 @@ const middleware = require("../middleware")
 //obtener eventos
 router.get("/", (req, res, next) => {
 
-    const sql = "SELECT * FROM eventos"
+    const { orden, limite } = req.query;
 
-    db.query(sql)
+
+    let sql = "SELECT * FROM eventos"
+    const valores = [];
+
+    if (orden === "nuevo") {
+        sql += " ORDER BY fecha DESC"
+    } else if (orden === "viejo") {
+        sql += " ORDER BY fecha ASC"
+    }
+
+    if (limite) {
+        const n = parseInt(limite);
+        if (!Number.isNaN(n) && n > 0) {
+            sql += " LIMIT ?";
+            valores.push(Math.min(n,50));
+        }
+    }
+
+    db.query(sql, valores)
         .then(([rows]) => {
             res.status(200).json(rows)
             console.log("Se trajeron los eventos")
