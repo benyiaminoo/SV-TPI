@@ -6,9 +6,28 @@ const middleware = require("../middleware")
 //obtener publicaciones
 router.get("/", (req, res, next) => {
 
-    const sql = "SELECT p.id_publicacion, p.titulo, p.descripcion, p.img_url, p.organizador_id,  p.fecha_creacion, o.nombre, o.portada FROM publicaciones p INNER JOIN organizaciones o ON p.organizador_id = o.id_org WHERE p.activo = 1 ORDER BY fecha_creacion DESC"
+    const { orden, limite } = req.query;
 
-    db.query(sql)
+    let sql = "SELECT p.id_publicacion, p.titulo, p.descripcion, p.img_url, p.organizador_id,  p.fecha_creacion, o.nombre, o.portada FROM publicaciones p INNER JOIN organizaciones o ON p.organizador_id = o.id_org WHERE p.activo = 1 "
+    const valores = [];
+
+    if (orden === "nuevo") {
+        sql += " ORDER BY fecha_creacion DESC"
+    } else if (orden === "viejo") {
+        sql += " ORDER BY fecha_creacion ASC"
+    }
+
+    if (limite) {
+        const n = parseInt(limite);
+        if (!Number.isNaN(n) && n > 0) {
+            sql += " LIMIT ? "  ;
+            valores.push(Math.min(n,50));
+        }
+    }
+
+
+
+    db.query(sql, valores)
         .then(([rows]) => {
             res.status(200).json(rows)
             console.log("Se trajeron las publicaciones")
