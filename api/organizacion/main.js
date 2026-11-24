@@ -21,23 +21,9 @@ router.get("/", (req, res, next) => {
         })
 })
 
-//obtener organizacion por id
-router.get("/:id", (req, res, next) => {
-    const { id } = req.params
-    const sql = "SELECT * FROM organizaciones WHERE id_org = ?"
-
-    db.query(sql, [id])
-        .then(([rows]) => {
-            res.status(200).json(rows)
-            console.log("Se trajo a la organizacion")
-        })
-        .catch((error) => {
-            console.error(error);
-            res.status(500).send("Ocurrio un error")
-        })
-})
 // Organizaciones a las que pertenece el usuario logueado
 router.get("/mias", middleware, (req, res) => {
+     console.log("usuario del token:", req.user);
     const sql = `
         SELECT
             organizaciones.id_org,
@@ -59,6 +45,23 @@ router.get("/mias", middleware, (req, res) => {
             res.status(500).send("Ocurrio un error");
         });
 });
+
+//obtener organizacion por id
+router.get("/:id", (req, res, next) => {
+    const { id } = req.params
+    const sql = "SELECT * FROM organizaciones WHERE id_org = ?"
+
+    db.query(sql, [id])
+        .then(([rows]) => {
+            res.status(200).json(rows)
+            console.log("Se trajo a la organizacion")
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send("Ocurrio un error")
+        })
+})
+
 
 
 //crear org con autorizacion
