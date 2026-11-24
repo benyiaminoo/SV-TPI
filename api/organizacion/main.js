@@ -3,6 +3,8 @@ const db = require('../../db/conexion')
 
 const middleware = require("../middleware")
 
+const ROL_DUENO = 1;
+
 //obtener organizaciones
 router.get("/", (req, res, next) => {
 
@@ -37,21 +39,41 @@ router.get("/:id", (req, res, next) => {
 
 
 //crear org con autorizacion
-router.post("/crear", middleware, (req, res, next) => {
+router.post("/crear", middleware, async (req, res, next) => {
     const { nombre, ubicacion} = req.body
     const creacion = new Date().toISOString().split("T")[0];
-    const sql = "INSERT INTO organizaciones (nombre, ubicacion , creacion) VALUES (?, ?, ?)";
 
-    db.query(sql, [nombre, ubicacion, creacion])
-        .then(() => {
-            res.status(201).send("Organización creada")
-            console.log("Se creó una organización")
-        })
-        .catch((error) => {
-            console.error(error);
-            res.status(500).send("Ocurrio un error")
-        })
-})
+    const usuarioId = req.user.id; //token
+
+    const conexion = await db.getConnection();
+
+    try {
+        await conexion.beginTransaction();
+
+        const [resultado] = await conexion.query(
+            "INSERT INTO organizaciones (nombre, ubicacion, creacion) VALUES (?, ?, ?)",
+            [nombre, ubicacion, creacion] 
+        );
+
+        const organizacionId = resultado.insertId;
+
+        await conexion.query(
+            "INSERT INTO usuariosOrganizaciones (usuario_id, organizacion_id, rol_id) VALUES (?, ?, ?)",
+            [usuarioId, organizacionId, ROL_DUENO]
+        )
+
+        await conexion.commit();
+        res.status(201).json({id_organizacion: organizacionId, nombre: nombre})
+        } catch (error) {
+        await conexion.rollback();
+        console.error(error);
+        res.status(500).send("Ocurrio un error");
+    } finally {
+        conexion.release();
+    }
+    }
+    
+)
 
 
 //eliminar organizacion
