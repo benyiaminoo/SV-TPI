@@ -36,11 +36,34 @@ router.get("/:id", (req, res, next) => {
             res.status(500).send("Ocurrio un error")
         })
 })
+// Organizaciones a las que pertenece el usuario logueado
+router.get("/mias", middleware, (req, res) => {
+    const sql = `
+        SELECT
+            organizaciones.id_org,
+            organizaciones.nombre,
+            organizaciones.ubicacion,
+            organizaciones.creacion,
+            organizaciones.portada,
+            usuariosOrganizaciones.rol_id
+        FROM usuariosOrganizaciones
+        JOIN organizaciones
+            ON organizaciones.id_org = usuariosOrganizaciones.organizacion_id
+        WHERE usuariosOrganizaciones.usuario_id = ?
+            AND organizaciones.activo = 1`;
+
+    db.query(sql, [req.user.id])
+        .then(([filas]) => res.status(200).json(filas))
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send("Ocurrio un error");
+        });
+});
 
 
 //crear org con autorizacion
 router.post("/crear", middleware, async (req, res, next) => {
-    const { nombre, ubicacion} = req.body
+    const { nombre, ubicacion } = req.body
     const creacion = new Date().toISOString().split("T")[0];
 
     const usuarioId = req.user.id; //token
@@ -52,7 +75,7 @@ router.post("/crear", middleware, async (req, res, next) => {
 
         const [resultado] = await conexion.query(
             "INSERT INTO organizaciones (nombre, ubicacion, creacion) VALUES (?, ?, ?)",
-            [nombre, ubicacion, creacion] 
+            [nombre, ubicacion, creacion]
         );
 
         const organizacionId = resultado.insertId;
@@ -63,16 +86,16 @@ router.post("/crear", middleware, async (req, res, next) => {
         )
 
         await conexion.commit();
-        res.status(201).json({id_organizacion: organizacionId, nombre: nombre})
-        } catch (error) {
+        res.status(201).json({ id_organizacion: organizacionId, nombre: nombre })
+    } catch (error) {
         await conexion.rollback();
         console.error(error);
         res.status(500).send("Ocurrio un error");
     } finally {
         conexion.release();
     }
-    }
-    
+}
+
 )
 
 

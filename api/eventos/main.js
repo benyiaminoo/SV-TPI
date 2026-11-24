@@ -2,6 +2,7 @@ const router = require("express").Router()
 const db = require('../../db/conexion')
 
 const middleware = require("../middleware")
+const perteneceAOrg = require("../pertenece");
 
 //obtener eventos
 router.get("/", (req, res, next) => {
@@ -72,12 +73,12 @@ router.get("/org/:id", (req, res, next) => {
 
 
 //crear eventos con autorizacion
-router.post("/crear", middleware, (req, res, next) => {
-    const { nombre, organizacion_id, inicio, capacidad } = req.body
+router.post("/crear", middleware, perteneceAOrg(1) , (req, res, next) => {
+    const { nombre, lugar, fecha, hora, capacidad } = req.body
 
-    const sql = "INSERT INTO eventos (nombre, organizacion_id, inicio, capacidad) VALUES (?, ?, ?, ?)";
+    const sql = "INSERT INTO eventos (nombre, organizacion_id, fecha, capacidad, lugar, hora) VALUES (?, ?, ?, ?, ?, ?)";
 
-    db.query(sql, [nombre, organizacion_id, inicio, capacidad,])
+    db.query(sql, [nombre, req.org.id, fecha, capacidad, lugar, hora])
         .then(() => {
             res.status(201).send("evento creado")
             console.log("Se creó un evento")
