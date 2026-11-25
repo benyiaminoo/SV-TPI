@@ -1,5 +1,6 @@
 const router = require("express").Router()
-const db = require('../../db/conexion')
+const db = require('../../db/conexion');
+const esSocio = require("../esSocio");
 
 const middleware = require("../middleware")
 
@@ -65,7 +66,7 @@ router.get("/:id", (req, res, next) => {
 
 
 //crear org con autorizacion
-router.post("/crear", middleware, async (req, res, next) => {
+router.post("/crear", middleware, esSocio, async (req, res, next) => {
     const { nombre, ubicacion } = req.body
     const creacion = new Date().toISOString().split("T")[0];
 

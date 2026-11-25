@@ -5,7 +5,7 @@ const LoginRouter = require('./usuarios/login');
 const organizacionRouter = require('./organizacion/main');
 const publicacionRouter = require('./publicaciones/main');
 const eventosRouter = require("./eventos/main");
-
+const membresiaRouter = require("./membresia/main");
 
 const middleware = require("./middleware")
 
@@ -14,6 +14,7 @@ router.use("/org", organizacionRouter);
 router.use("/login", LoginRouter);
 router.use("/publicaciones", publicacionRouter);
 router.use("/eventos", eventosRouter);
+router.use("/membresia", membresiaRouter);
 
 router.get("/", (req, res, next) => {
     res.send("Endpoint de API");
