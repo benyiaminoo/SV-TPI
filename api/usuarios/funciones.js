@@ -17,7 +17,8 @@ function crearToken(datos) {
         email: datos.email,
         nombre: datos.nombre,
         id: datos.id_usuario,
-        rol:datos.rol
+        rol:datos.rol,
+        socio: Boolean(datos.socio)
     }
 
     const token = jwt.sign(payload, TOKEN_SECRET, {expiresIn: "2h"});
