@@ -47,6 +47,25 @@ router.get("/mias", middleware, (req, res) => {
         });
 });
 
+//Obtener ORGS por id usuario
+router.get("/user", middleware,(req, res, next) => {
+
+    const usuarioId = req.user.id; //token
+
+    const sql = "SELECT o.id_org, o.nombre, o.ubicacion, o.portada FROM organizaciones o INNER JOIN usuariosOrganizaciones u ON o.id_org = u.organizacion_id WHERE u.usuario_id = ?"
+
+
+    db.query(sql, [usuarioId])
+        .then(([rows]) => {
+            res.status(200).json(rows)
+            console.log("Se trajo a la organizacion DEL TOUKEN PADRE")
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send("Ocurrio un error")
+        })
+})
+
 //obtener organizacion por id
 router.get("/:id", (req, res, next) => {
     const { id } = req.params
