@@ -2,6 +2,8 @@ const router = require("express").Router()
 const db = require('../../db/conexion');
 const esSocio = require("../esSocio");
 
+const perteneceAORG = require("../pertenece")
+
 const middleware = require("../middleware")
 
 const ROL_DUENO = 1;
@@ -22,9 +24,11 @@ router.get("/", (req, res, next) => {
         })
 })
 
+
+
 // Organizaciones a las que pertenece el usuario logueado
 router.get("/mias", middleware, (req, res) => {
-     console.log("usuario del token:", req.user);
+    console.log("usuario del token:", req.user);
     const sql = `
         SELECT
             organizaciones.id_org,
@@ -47,8 +51,28 @@ router.get("/mias", middleware, (req, res) => {
         });
 });
 
+router.get("/mias/:orgId", middleware, perteneceAORG(), async (req, res, nex) => {
+
+    try {
+        const [filas] = await db.query(
+            `SELECT id_org, nombre, ubicacion, creacion, portada
+         FROM organizaciones
+         WHERE id_org = ?`,
+            [req.org.id]
+        )
+
+        if (filas.length === 0) {
+            return res.status(404).send("Organización no encontrada");
+        }
+        res.status(200).json(filas[0]);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Ocurrió un error");
+    }
+})
+
 //Obtener ORGS por id usuario
-router.get("/user", middleware,(req, res, next) => {
+router.get("/user", middleware, (req, res, next) => {
 
     const usuarioId = req.user.id; //token
 
