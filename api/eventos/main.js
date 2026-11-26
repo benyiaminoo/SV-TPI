@@ -57,7 +57,7 @@ router.get("/:id", (req, res, next) => {
 //obtener eventos por id de organizacion
 router.get("/org/:id", (req, res, next) => {
     const { id } = req.params
-    const sql = "SELECT * FROM eventos WHERE organizacion_id = ?"
+    const sql = "SELECT * FROM eventos WHERE organizacion_id = ? ORDER BY fecha ASC"
 
     db.query(sql, [id])
         .then(([rows]) => {
