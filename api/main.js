@@ -6,6 +6,7 @@ const organizacionRouter = require('./organizacion/main');
 const publicacionRouter = require('./publicaciones/main');
 const eventosRouter = require("./eventos/main");
 const membresiaRouter = require("./membresia/main");
+const entradasRouter = require("./entradas/main")
 
 const middleware = require("./middleware")
 
@@ -13,6 +14,7 @@ router.use("/usuarios", usuariosRouter);
 router.use("/org", organizacionRouter);
 router.use("/login", LoginRouter);
 router.use("/publicaciones", publicacionRouter);
+router.use("/eventos/:eventoId/entradas", entradasRouter);
 router.use("/eventos", eventosRouter);
 router.use("/membresia", membresiaRouter);
 
