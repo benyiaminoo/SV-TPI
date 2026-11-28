@@ -1,5 +1,5 @@
 const router = require("express").Router();
-
+const comprasRouter = require("./compras/main");
 const usuariosRouter = require('./usuarios/main');
 const LoginRouter = require('./usuarios/login');
 const organizacionRouter = require('./organizacion/main');
@@ -17,6 +17,8 @@ router.use("/publicaciones", publicacionRouter);
 router.use("/eventos/:eventoId/entradas", entradasRouter);
 router.use("/eventos", eventosRouter);
 router.use("/membresia", membresiaRouter);
+router.use("/compras", comprasRouter);
+
 
 router.get("/", (req, res, next) => {
     res.send("Endpoint de API");
